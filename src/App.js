@@ -12,12 +12,11 @@ class App extends Component {
         <header>
           <Link to='/'>Landing</Link>
           <Link to='/library'>Library</Link>
-          <Link to='/album'>Album</Link>
         </header>
         <main>
           <Route exact path='/' component={Landing} />
           <Route path='/library' component={Library} />
-          <Route path='/album' component={Album} />
+          <Route path='/album/:slug' component={Album} />
         </main>
       </div>
     );
