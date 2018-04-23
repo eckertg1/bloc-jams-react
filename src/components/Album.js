@@ -14,11 +14,12 @@ class Album extends Component {
         album : album,
         currentSong: undefined,
         currentTime: 0,
-        duration: 0,
+        duration: undefined,
         isPlaying: false,
         volume: 0.5,
         currentTimeFormated: '-:--',
-        durationFormated: '-:--'
+        durationFormated: '-:--',
+        isHovered: false
       };
 
     this.audioElement = document.createElement('audio');
@@ -72,6 +73,9 @@ class Album extends Component {
       this.pause();
     }
     else{
+      if (!isSameSong) {
+        this.setSong(song)
+      }
       this.play();
     }
   }
@@ -143,12 +147,27 @@ class Album extends Component {
           </colgroup>
           <tbody>
             {this.state.album.songs.map( (song,index) =>
-              <tr key={index} className="song" onClick={() => this.handleSongClick(song)}>
+              <tr key={index} className="song" onClick={() => this.handleSongClick(song)}
+                onMouseEnter={() => this.setState({ isHovered: index + 1 })}
+                onMouseLeave={() => this.setState({ isHovered: false})}
+              >
+
                 <td className="song-actions">
-                  <button onClick= {() => this.setSong(song)}>
-                    <span className="song-number">{index + 1 }</span>
-                    <span className="ion-play"></span>
-                    <span className="ion-pause"></span>
+                  <button className="song-actions-button">
+
+                    {
+                      (this.state.currentSong === undefined) ?
+                        <span className="song-number">{index + 1}</span>
+                      :
+                        (this.state.currentSong.title === song.title) ?
+                          <span className={this.state.isPlaying ? "ion-pause" : "ion-play"}></span>
+                          :
+                          (this.state.isHovered === index + 1) ?
+                            <span className="ion-play"></span>
+                            :
+                            <span className="song-number">{index + 1}</span>
+                    }
+
                   </button>
                 </td>
                 <td className="song-title">{song.title}</td>
